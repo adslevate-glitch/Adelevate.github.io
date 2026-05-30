@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Barlow', sans-serif; background: #0a0a0a; color: #fff; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 48px;
+    background: rgba(10,10,10,0.92);
+    border-bottom: 1px solid rgba(255,180,0,0.15);
+    backdrop-filter: blur(10px);
+  }
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: #FFB400; }
+  .logo span { color: #fff; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: #FFB400; }
+  .nav-cta { background: #FFB400; color: #0a0a0a; border: none; padding: 10px 24px; font-family: 'Barlow', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0a0a0a 0%, #111 40%, #1a1200 100%);
+    display: flex; align-items: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -200px; right: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(255,180,0,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,180,0,0.12);
+    border: 1px solid rgba(255,180,0,0.4);
+    color: #FFB400;
+    font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+    padding: 6px 16px; margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 8vw, 100px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+  }
+  .hero h1 em { color: #FFB400; font-style: normal; display: block; }
+  .hero p {
+    font-size: 18px; color: rgba(255,255,255,0.6); max-width: 520px;
+    line-height: 1.7; margin-bottom: 40px; font-weight: 300;
+  }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    background: #FFB400; color: #0a0a0a;
+    padding: 16px 36px; border: none;
+    font-family: 'Barlow', sans-serif; font-size: 14px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: #e6a200; }
+  .btn-secondary {
+    background: transparent; color: #fff;
+    padding: 16px 36px; border: 1px solid rgba(255,255,255,0.25);
+    font-family: 'Barlow', sans-serif; font-size: 14px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .btn-secondary:hover { border-color: #FFB400; color: #FFB400; }
+
+  /* STATS */
+  .stats-bar {
+    background: #FFB400;
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 28px 48px; flex-wrap: wrap; gap: 20px;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: #0a0a0a; line-height: 1; }
+  .stat-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(0,0,0,0.6); margin-top: 2px; }
+  .stat-divider { width: 1px; height: 50px; background: rgba(0,0,0,0.15); }
+
+  /* SECTION */
+  section { padding: 96px 48px; }
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    color: #FFB400; margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif; font-size: clamp(38px, 5vw, 60px);
+    letter-spacing: 1px; line-height: 1;
+  }
+
+  /* INVENTORY */
+  .inventory { background: #0d0d0d; }
+  .inventory-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; flex-wrap: wrap; gap: 16px; }
+  .filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tab {
+    background: transparent; color: rgba(255,255,255,0.45);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 8px 20px; font-family: 'Barlow', sans-serif;
+    font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .tab.active, .tab:hover { background: #FFB400; color: #0a0a0a; border-color: #FFB400; }
+  .car-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+  .car-card {
+    background: #161616; border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden; transition: transform 0.2s, border-color 0.2s;
+    cursor: pointer;
+  }
+  .car-card:hover { transform: translateY(-4px); border-color: rgba(255,180,0,0.3); }
+  .car-img {
+    height: 190px; background: #1e1e1e;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .car-img svg { width: 120px; opacity: 0.25; }
+  .car-tag {
+    position: absolute; top: 12px; left: 12px;
+    background: #FFB400; color: #0a0a0a;
+    font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 4px 10px;
+  }
+  .car-body { padding: 20px; }
+  .car-year { font-size: 11px; color: #FFB400; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+  .car-name { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 1px; margin: 4px 0 12px; }
+  .car-specs { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+  .car-spec { font-size: 12px; color: rgba(255,255,255,0.45); display: flex; align-items: center; gap: 4px; }
+  .car-spec::before { content: '●'; color: #FFB400; font-size: 6px; }
+  .car-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 16px; }
+  .car-price { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: #FFB400; }
+  .car-cta {
+    background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.2);
+    padding: 8px 16px; font-size: 11px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; cursor: pointer; transition: all 0.2s;
+  }
+  .car-cta:hover { background: #FFB400; color: #0a0a0a; border-color: #FFB400; }
+
+  /* WHY US */
+  .why { background: #0a0a0a; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 32px; margin-top: 56px; }
+  .feature { border-left: 3px solid #FFB400; padding-left: 24px; }
+  .feature-icon { font-size: 28px; margin-bottom: 16px; }
+  .feature h3 { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; margin-bottom: 8px; }
+  .feature p { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.6; font-weight: 300; }
+
+  /* CONTACT */
+  .contact { background: #111; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+  .contact-info h2 { margin-bottom: 20px; }
+  .contact-info p { color: rgba(255,255,255,0.5); font-size: 16px; line-height: 1.7; margin-bottom: 36px; font-weight: 300; }
+  .contact-details { display: flex; flex-direction: column; gap: 20px; }
+  .contact-item { display: flex; align-items: flex-start; gap: 16px; }
+  .contact-dot { width: 8px; height: 8px; background: #FFB400; flex-shrink: 0; margin-top: 6px; }
+  .contact-item strong { display: block; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #FFB400; margin-bottom: 4px; }
+  .contact-item span { font-size: 15px; color: rgba(255,255,255,0.7); }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1);
+    color: #fff; padding: 14px 16px; font-family: 'Barlow', sans-serif; font-size: 15px;
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #FFB400; }
+  .form-group textarea { height: 100px; resize: vertical; }
+  .form-group select { appearance: none; }
+  .whatsapp-btn {
+    display: flex; align-items: center; gap: 12px;
+    background: #25D366; color: #fff; border: none;
+    padding: 16px 28px; width: 100%; margin-bottom: 12px;
+    font-family: 'Barlow', sans-serif; font-size: 14px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+    justify-content: center; transition: background 0.2s;
+  }
+  .whatsapp-btn:hover { background: #1ebe5a; }
+
+  /* FOOTER */
+  footer {
+    background: #000; padding: 32px 48px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+    border-top: 1px solid rgba(255,180,0,0.15);
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: #FFB400; }
+  footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
+
+  /* MOBILE */
+  @media (max-width: 680px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    section { padding: 60px 24px; }
+    .stats-bar { padding: 24px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    footer { padding: 24px; flex-direction: column; text-align: center; }
+    .stat-divider { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">AUTO<span>LOOK</span></div>
+  <ul class="nav-links">
+    <li><a href="#">Inicio</a></li>
+    <li><a href="#">Inventario</a></li>
+    <li><a href="#">Nosotros</a></li>
+    <li><a href="#">Contacto</a></li>
+  </ul>
+  <button class="nav-cta">Ver Autos</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-badge">34 años de experiencia</div>
+    <h1>Tu próximo<em>auto ideal</em>te espera</h1>
+    <p>En Autolook encontrás los mejores vehículos del mercado costarricense, con garantía de calidad y el respaldo de más de tres décadas de trayectoria.</p>
+    <div class="hero-btns">
+      <button class="btn-primary">Ver Inventario</button>
+      <button class="btn-secondary">📲 WhatsApp</button>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num">34</div><div class="stat-label">Años de experiencia</div></div>
+  <div class="stat-divider"></div>
+  <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Autos vendidos</div></div>
+  <div class="stat-divider"></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Traspaso incluido</div></div>
+  <div class="stat-divider"></div>
+  <div class="stat"><div class="stat-num">CR</div><div class="stat-label">Costa Rica</div></div>
+</div>
+
+<!-- INVENTARIO -->
+<section class="inventory">
+  <div class="inventory-header">
+    <div>
+      <div class="section-label">Vehículos disponibles</div>
+      <h2 class="section-title">Nuestro Inventario</h2>
+    </div>
+    <div class="filter-tabs">
+      <button class="tab active">Todos</button>
+      <button class="tab">Pickup</button>
+      <button class="tab">SUV</button>
+      <button class="tab">Sedán</button>
+    </div>
+  </div>
+
+  <div class="car-grid">
+    <!-- Card 1 -->
+    <div class="car-card">
+      <div class="car-img">
+        <div class="car-tag">Disponible</div>
+        <svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="30" width="160" height="30" rx="8" fill="#FFB400" opacity="0.6"/>
+          <rect x="40" y="15" width="100" height="25" rx="6" fill="#FFB400" opacity="0.4"/>
+          <circle cx="55" cy="62" r="12" fill="#555"/>
+          <circle cx="145" cy="62" r="12" fill="#555"/>
+        </svg>
+      </div>
+      <div class="car-body">
+        <div class="car-year">2012</div>
+        <div class="car-name">Dodge Ram 1500</div>
+        <div class="car-specs">
+          <span class="car-spec">5.7L V8</span>
+          <span class="car-spec">4x4</span>
+          <span class="car-spec">Automático</span>
+        </div>
+        <div class="car-footer">
+          <div class="car-price">¢12.300.000</div>
+          <button class="car-cta">Ver más</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="car-card">
+      <div class="car-img">
+        <div class="car-tag">Destacado</div>
+        <svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="30" width="160" height="30" rx="8" fill="#FFB400" opacity="0.6"/>
+          <rect x="50" y="18" width="90" height="22" rx="5" fill="#FFB400" opacity="0.4"/>
+          <circle cx="55" cy="62" r="12" fill="#555"/>
+          <circle cx="145" cy="62" r="12" fill="#555"/>
+        </svg>
+      </div>
+      <div class="car-body">
+        <div class="car-year">2019</div>
+        <div class="car-name">Toyota Hilux</div>
+        <div class="car-specs">
+          <span class="car-spec">2.8L Diesel</span>
+          <span class="car-spec">4x4</span>
+          <span class="car-spec">Manual</span>
+        </div>
+        <div class="car-footer">
+          <div class="car-price">¢18.500.000</div>
+          <button class="car-cta">Ver más</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="car-card">
+      <div class="car-img">
+        <div class="car-tag">Nuevo</div>
+        <svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="25" y="28" width="150" height="32" rx="10" fill="#FFB400" opacity="0.6"/>
+          <rect x="45" y="14" width="110" height="24" rx="6" fill="#FFB400" opacity="0.4"/>
+          <circle cx="58" cy="63" r="12" fill="#555"/>
+          <circle cx="142" cy="63" r="12" fill="#555"/>
+        </svg>
+      </div>
+      <div class="car-body">
+        <div class="car-year">2021</div>
+        <div class="car-name">Ford F-150</div>
+        <div class="car-specs">
+          <span class="car-spec">3.5L EcoBoost</span>
+          <span class="car-spec">4x4</span>
+          <span class="car-spec">Automático</span>
+        </div>
+        <div class="car-footer">
+          <div class="car-price">¢24.900.000</div>
+          <button class="car-cta">Ver más</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POR QUÉ AUTOLOOK -->
+<section class="why">
+  <div class="section-label">¿Por qué elegirnos?</div>
+  <h2 class="section-title">La diferencia<br>Autolook</h2>
+  <div class="features-grid">
+    <div class="feature">
+      <div class="feature-icon">🏆</div>
+      <h3>34 Años de Experiencia</h3>
+      <p>Somos referentes en el mercado automotriz costarricense desde hace más de tres décadas.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📋</div>
+      <h3>Traspaso Incluido</h3>
+      <p>Nos encargamos de todo el papeleo. El precio que ves incluye el traspaso sin costos ocultos.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔍</div>
+      <h3>Revisión Técnica</h3>
+      <p>Todos nuestros vehículos pasan por una inspección mecánica antes de ponerse en venta.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">💬</div>
+      <h3>Atención Personalizada</h3>
+      <p>Te asesoramos para que encontrés el vehículo que mejor se adapta a tus necesidades y presupuesto.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="contact">
+  <div class="section-label">Hablemos</div>
+  <h2 class="section-title" style="margin-bottom: 48px;">Contactanos</h2>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p>Visitanos en nuestra sede o escribinos por WhatsApp. Estamos listos para ayudarte a encontrar tu próximo auto.</p>
+      <div class="contact-details">
+        <div class="contact-item">
+          <div class="contact-dot"></div>
+          <div>
+            <strong>Dirección</strong>
+            <span>Calle Blancos, Goicoechea. Contiguo a Macopa, San José, CR 10803</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-dot"></div>
+          <div>
+            <strong>Teléfono / WhatsApp</strong>
+            <span>7202 7387 · +506 7202 7387</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-dot"></div>
+          <div>
+            <strong>Correo</strong>
+            <span>crautolook@gmail.com</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-dot"></div>
+          <div>
+            <strong>Horario</strong>
+            <span>Lunes a Sábado: 8am – 6pm</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <button class="whatsapp-btn">📲 Escribir por WhatsApp ahora</button>
+      <div class="form-group">
+        <label>Tu nombre</label>
+        <input type="text" placeholder="Juan Pérez">
+      </div>
+      <div class="form-group">
+        <label>Teléfono</label>
+        <input type="text" placeholder="8888-0000">
+      </div>
+      <div class="form-group">
+        <label>¿Qué buscás?</label>
+        <select>
+          <option>Pickup / Camioneta</option>
+          <option>SUV / Todoterreno</option>
+          <option>Sedán</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Mensaje</label>
+        <textarea placeholder="Contanos qué estás buscando..."></textarea>
+      </div>
+      <button class="btn-primary" style="width:100%">Enviar Consulta →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">AUTOLOOK</div>
+  <p>© 2025 Autolook Venta de Autos · Calle Blancos, Goicoechea, Costa Rica</p>
+  <p style="color:rgba(255,180,0,0.5); font-size:11px;">34 años en el mercado</p>
+</footer>
+
+<script>
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
